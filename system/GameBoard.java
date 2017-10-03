@@ -173,10 +173,12 @@ public class GameBoard {
 	}
 
 	/**
-	 * Makes each player's next move.
+	 * Makes each player's next move in a random order.
 	 */
 	private void step() {
-		for (int i = 0; i < kingdoms; i++) {
+		int[] sequence = g.getSequence();
+		for (int x = 0; x < kingdoms; x++) {
+			int i = sequence[x];
 			if (!moves[i].isEmpty()) {
 				Move m = moves[i].poll();
 				System.out.println("(" + m.startI + "," + m.startJ + ") to (" + m.endI + "," + m.endJ + ")");

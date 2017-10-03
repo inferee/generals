@@ -10,7 +10,6 @@ import java.awt.event.KeyListener;
 import java.util.ArrayDeque;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import system.GameBoard;
@@ -301,7 +300,8 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-		GameBoard g = new GameBoard(18, 18, 40, 10, 2, 7, 5);
+		GameBoard g = new GameBoard(18, 18, 30, 10, 2, 9, 7);
+		// GameBoard g = new GameBoard(18, 18, 30, 10, 8, 7, 5);
 		long before = System.nanoTime();
 		long time = 0;
 		long tick = 10;

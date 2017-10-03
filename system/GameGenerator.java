@@ -22,6 +22,7 @@ public class GameGenerator {
 	private int minMazeDist;
 	private int[][] grid;
 	private int[][] kings;
+	private int[] playerSequence;
 
 	/**
 	 * Creates a new game board generator.
@@ -52,6 +53,8 @@ public class GameGenerator {
 		this.minMazeDist = minMazeDist;
 		grid = new int[i][j];
 		kings = new int[kingdoms][2];
+		playerSequence = new int[kingdoms];
+		initSequence();
 	}
 
 	/**
@@ -64,7 +67,22 @@ public class GameGenerator {
 	}
 
 	/**
-	 * Returns the location of the kings
+	 * Randomly generates a player sequence and returns it.
+	 * 
+	 * @return the randomly generated sequence
+	 */
+	public int[] getSequence() {
+		for (int i = 0; i < playerSequence.length; i++) {
+			int x = i + r.nextInt(playerSequence.length - i);
+			int hold = playerSequence[x];
+			playerSequence[x] = playerSequence[i];
+			playerSequence[i] = hold;
+		}
+		return playerSequence;
+	}
+
+	/**
+	 * Returns the location of the kings.
 	 * 
 	 * @return the currently generated location of the kings
 	 */
@@ -73,7 +91,7 @@ public class GameGenerator {
 	}
 
 	/**
-	 * Attempts to create a new grid
+	 * Attempts to create a new grid.
 	 * 
 	 * @param attempts
 	 *            - the number of attempts before giving up
@@ -188,6 +206,15 @@ public class GameGenerator {
 			}
 		}
 		return newGrid;
+	}
+
+	/**
+	 * Initializes the player sequence.
+	 */
+	private void initSequence() {
+		for (int i = 0; i < playerSequence.length; i++) {
+			playerSequence[i] = i;
+		}
 	}
 
 	/**
