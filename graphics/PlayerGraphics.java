@@ -21,7 +21,7 @@ public class PlayerGraphics implements Player {
 	private final int jSize;
 	private final int kingdoms;
 	private final int playerNumber;
-	private Color[] colors = new Color[] { Color.DARK_GRAY, Color.GRAY, Color.RED, Color.BLUE, Color.YELLOW,
+	private Color[] colors = new Color[] { new Color(100,100,100), Color.GRAY, Color.RED, Color.BLUE, Color.YELLOW,
 			Color.GREEN, Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.WHITE };
 	private JFrame frame;
 	private BoardGraphics board;
@@ -55,7 +55,7 @@ public class PlayerGraphics implements Player {
 	/**
 	 * Initializes all graphics.
 	 */
-	private void initializeGraphics() {
+	private void initializeGraphics() {// 55,62
 		board = new BoardGraphics(iSize, jSize, 55, playerNumber, colors, queue);
 		stats = new StatGraphics(kingdoms, colors, 80);
 		JPanel container = new JPanel();

@@ -10,6 +10,8 @@ import java.awt.event.KeyListener;
 import java.util.ArrayDeque;
 
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import system.GameBoard;
@@ -27,8 +29,10 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 	private final int boardButtonSize;
 	private final int playerNumber;
 	private final Color[] colors;
-	private final Icon[] icons = new Icon[] { null, null, null, null };
+	private final Icon[] icons = new Icon[] { null, createImageIcon("mountain.png", "mountain"),
+			createImageIcon("city.png", "city"), createImageIcon("king.png", "king") };
 	private ToggleButton[][] boardButtons;
+	private JLabel[][] boardText;
 	private Viewed[][] board;
 	private ToggleButton selected;
 	private ToggleButton previous;
@@ -61,6 +65,7 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 		all = true;
 		initializeButtons();
 		initializePanel();
+		update(initialView());
 	}
 
 	/*
@@ -83,6 +88,8 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 	 * 
 	 * Selected spot becoming an invalid spot when keys are pressed quickly. SOLVED
 	 * (???, code rework)
+	 * 
+	 * Icons conflicting with the text. SOLVED (???, code rework)
 	 */
 	/**
 	 * Updates the board.
@@ -100,13 +107,12 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 					boardButtons[x][y].setBackground(colors[0]);
 				}
 				if (!board[x][y].known || board[x][y].mountain || board[x][y].troops == 0) {
-					boardButtons[x][y].setText("");
+					boardText[x][y].setText("");
 				} else {
-					boardButtons[x][y].setText(Integer.toString(board[x][y].troops));
+					boardText[x][y].setText(Integer.toString(board[x][y].troops));
 				}
 				if (board[x][y].mountain) {
 					boardButtons[x][y].setIcon(icons[1]);
-					boardButtons[x][y].setText("X");
 				} else if (board[x][y].city) {
 					boardButtons[x][y].setIcon(icons[2]);
 				} else if (board[x][y].king) {
@@ -127,6 +133,25 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 	public void failedMove(Move failing) {
 		if (board[failing.startI][failing.startJ].type == playerNumber) {
 			previous = boardButtons[failing.startI][failing.startJ];
+		}
+	}
+
+	/**
+	 * Pulls an ImageIcon from a file.
+	 * 
+	 * @param path
+	 *            - the file name
+	 * @param description
+	 *            - the icon description
+	 * @return the icon if found, <code>null</code> if the path is invalid
+	 */
+	private ImageIcon createImageIcon(String path, String description) {
+		java.net.URL imgURL = getClass().getResource(path);
+		if (imgURL != null) {
+			return new ImageIcon(imgURL, description);
+		} else {
+			System.err.println("Couldn't find file: " + path);
+			return null;
 		}
 	}
 
@@ -274,10 +299,14 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 	 */
 	private void initializeButtons() {
 		boardButtons = new ToggleButton[iSize][jSize];
+		boardText = new JLabel[iSize][jSize];
 		Dimension d = new Dimension(boardButtonSize, boardButtonSize);
 		for (int x = 0; x < iSize; x++) {
 			for (int y = 0; y < jSize; y++) {
+				boardText[x][y] = new JLabel(icons[0], JLabel.CENTER);
+				boardText[x][y].setAlignmentX(JLabel.CENTER_ALIGNMENT);
 				boardButtons[x][y] = new ToggleButton(x, y);
+				boardButtons[x][y].add(boardText[x][y]);
 				boardButtons[x][y].setPreferredSize(d);
 				boardButtons[x][y].addActionListener(this);
 				boardButtons[x][y].addKeyListener(this);
@@ -299,9 +328,24 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 		setVisible(true);
 	}
 
+	/**
+	 * Provides a initial empty board to prevent a null pointer exception.
+	 * 
+	 * @return a initialized empty board
+	 */
+	private Viewed[][] initialView() {
+		Viewed[][] r = new Viewed[iSize][jSize];
+		for (int i = 0; i < iSize; i++) {
+			for (int j = 0; j < jSize; j++) {
+				r[i][j] = new Viewed(false, false, 0, 0, false, false);
+			}
+		}
+		return r;
+	}
+
 	public static void main(String[] args) throws InterruptedException {
-		GameBoard g = new GameBoard(18, 18, 30, 10, 2, 9, 7);
-		// GameBoard g = new GameBoard(18, 18, 30, 10, 8, 7, 5);
+		// GameBoard g = new GameBoard(18, 18, 0.1, 0.04, 2, 9, 7);
+		GameBoard g = new GameBoard(18, 18, 0.1, 0.04, 8, 7, 5);
 		long before = System.nanoTime();
 		long time = 0;
 		long tick = 10;
@@ -309,7 +353,7 @@ public class BoardGraphics extends JPanel implements ActionListener, KeyListener
 		while (x-- > 0) {
 			g.cycle();
 			time = (long) (tick - (System.nanoTime() - before) / 1e6);
-			Thread.sleep(Math.max(time, 10));
+							Thread.sleep(Math.max(time, 10));
 			before = System.nanoTime();
 		}
 		tick = 500;

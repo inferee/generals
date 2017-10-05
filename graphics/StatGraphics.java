@@ -33,7 +33,7 @@ public class StatGraphics extends JPanel {
 		this.buttonWidth = buttonWidth;
 		initializeButtons();
 		initializePanel();
-
+		update(new int[kingdoms][2]);
 	}
 
 	/**

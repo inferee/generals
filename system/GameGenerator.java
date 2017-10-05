@@ -31,10 +31,10 @@ public class GameGenerator {
 	 *            - the i size of the board
 	 * @param j
 	 *            - the j size of the board
-	 * @param mountains
-	 *            - the number of mountains
-	 * @param cities
-	 *            - the number of cities
+	 * @param proportionMountains
+	 *            - the proportion of mountains
+	 * @param proportionCities
+	 *            - the proportion of cities
 	 * @param kingdoms
 	 *            - the number of kingdoms
 	 * @param minMazeDist
@@ -42,12 +42,13 @@ public class GameGenerator {
 	 * @param minManhattanDist
 	 *            - the minimum manhattan distance between kingdoms
 	 */
-	public GameGenerator(int i, int j, int mountains, int cities, int kingdoms, int minMazeDist, int minManhattanDist) {
+	public GameGenerator(int i, int j, double proportionMountains, double proportionCities, int kingdoms,
+			int minMazeDist, int minManhattanDist) {
 		r = new Random();
 		this.i = i;
 		this.j = j;
-		this.mountains = mountains;
-		this.cities = cities;
+		this.mountains = (int) (i * j * proportionMountains);
+		this.cities = (int) (i * j * proportionCities);
 		this.kingdoms = kingdoms;
 		this.minManhattanDist = minManhattanDist;
 		this.minMazeDist = minMazeDist;

@@ -42,12 +42,13 @@ public class GameBoard {
 	 * @param minMan
 	 *            - the minimum manhattan distance between kingdoms
 	 */
-	public GameBoard(int i, int j, int mountains, int cities, int kingdoms, int minMaze, int minMan) {
+	public GameBoard(int i, int j, double proportionMountains, double proportionCities, int kingdoms, int minMaze,
+			int minMan) {
 		this.kingdoms = kingdoms;
 		this.iSize = i;
 		this.jSize = j;
 		board = new Space[i][j];
-		g = new GameGenerator(i, j, mountains, cities, kingdoms, minMaze, minMan);
+		g = new GameGenerator(i, j, proportionMountains, proportionCities, kingdoms, minMaze, minMan);
 		initializePlayers();
 		reset();
 	}
@@ -72,13 +73,13 @@ public class GameBoard {
 	 *            - minimum manhattan distance between kings (for the game board
 	 *            generator)
 	 */
-	public GameBoard(Space[][] board, Player[] players, int mountains, int cities, int kingdoms, int minMaze,
-			int minMan) {
+	public GameBoard(Space[][] board, Player[] players, double proportionMountains, double proportionCities,
+			int kingdoms, int minMaze, int minMan) {
 		this.kingdoms = players.length;
 		this.iSize = board.length;
 		this.jSize = board[0].length;
 		this.players = players;
-		g = new GameGenerator(iSize, jSize, mountains, cities, kingdoms, minMaze, minMan);
+		g = new GameGenerator(iSize, jSize, proportionMountains, proportionCities, kingdoms, minMaze, minMan);
 		reset(board);
 	}
 
@@ -89,9 +90,9 @@ public class GameBoard {
 	 *            - the new board to be set
 	 */
 	public void reset(Space[][] board) {
-		this.board = board;
 		dead = new boolean[kingdoms];
 		count = 0;
+		this.board = board;
 		updateArmyState();
 		updatePlayers();
 	}
@@ -100,9 +101,9 @@ public class GameBoard {
 	 * Resets the game and randomly generates the board.
 	 */
 	public void reset() {
-		randomize();
 		dead = new boolean[kingdoms];
 		count = 0;
+		randomize();
 		updateArmyState();
 		updatePlayers();
 	}
