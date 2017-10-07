@@ -16,17 +16,9 @@ import system.Viewed;
  * 
  * @author Axel Li
  */
-public class PlayerGraphics implements Player {
-	private final int iSize;
-	private final int jSize;
-	private final int kingdoms;
-	private final int playerNumber;
-	private Color[] colors = new Color[] { new Color(100,100,100), Color.GRAY, Color.RED, Color.BLUE, Color.YELLOW,
-			Color.GREEN, Color.ORANGE, Color.CYAN, Color.MAGENTA, Color.WHITE };
-	private JFrame frame;
-	private BoardGraphics board;
-	private StatGraphics stats;
-	private ArrayDeque<Move> queue;
+public class PlayerGraphics extends SpectatorGraphics implements Player {
+	protected final int playerNumber;
+	protected ArrayDeque<Move> queue;
 
 	/**
 	 * Creates a new player interface.
@@ -43,36 +35,9 @@ public class PlayerGraphics implements Player {
 	 *            - the queue for Move objects
 	 */
 	public PlayerGraphics(int i, int j, int kingdoms, int playerNumber, ArrayDeque<Move> queue) {
-		this.iSize = i;
-		this.jSize = j;
-		this.kingdoms = kingdoms;
+		super(i, j, kingdoms, queue, playerNumber);
 		this.playerNumber = playerNumber;
-		colors = Arrays.copyOf(colors, kingdoms + 2);
 		this.queue = queue;
-		initializeGraphics();
-	}
-
-	/**
-	 * Initializes all graphics.
-	 */
-	private void initializeGraphics() {// 55,62
-		board = new BoardGraphics(iSize, jSize, 55, playerNumber, colors, queue);
-		stats = new StatGraphics(kingdoms, colors, 80);
-		JPanel container = new JPanel();
-		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
-		container.add(board);
-		container.add(stats);
-		frame = new JFrame("generals.io");
-		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-		frame.add(container);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-	}
-
-	public void update(Viewed[][] b, int[][] armyState) {
-		board.update(b);
-		stats.update(armyState);
 	}
 
 	public void failedMove(Move failing) {

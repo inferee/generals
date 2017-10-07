@@ -13,6 +13,7 @@ import javax.swing.JPanel;
  * @author Axel Li
  */
 public class StatGraphics extends JPanel {
+	private static final long serialVersionUID = 1L;
 	private final int kingdoms;
 	private final Color[] colors;
 	private final int buttonWidth;
@@ -37,7 +38,7 @@ public class StatGraphics extends JPanel {
 	}
 
 	/**
-	 * Updates the stats.
+	 * Updates the stats for each army.
 	 * 
 	 * @param armyState
 	 *            - the new army state for all players

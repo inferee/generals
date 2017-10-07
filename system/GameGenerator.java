@@ -92,6 +92,15 @@ public class GameGenerator {
 	}
 
 	/**
+	 * Returns a random city amount.
+	 * 
+	 * @return a number between 40 and 45, inclusive
+	 */
+	public int getRandomCity() {
+		return r.nextInt(6) + 40;
+	}
+
+	/**
 	 * Attempts to create a new grid.
 	 * 
 	 * @param attempts
@@ -219,7 +228,8 @@ public class GameGenerator {
 	}
 
 	/**
-	 * Conducts a A* search between two locations.
+	 * Conducts a A* search between two locations. The current implementation is
+	 * correct but is slower due to a small bug.
 	 * 
 	 * @param board
 	 *            - the board
@@ -233,8 +243,7 @@ public class GameGenerator {
 	 *            - the ending j position
 	 * @return the distance between the two locations, -1 if no path exists
 	 */
-	private static int AStar(int[][] board, int iStart, int jStart, int iEnd, int jEnd) {// currently broken, needs
-																							// to update
+	private int AStar(int[][] board, int iStart, int jStart, int iEnd, int jEnd) {
 		int I = board.length;
 		int J = board[0].length;
 		Set<Integer> visited = new HashSet<>();
@@ -271,7 +280,20 @@ public class GameGenerator {
 		return -1;
 	}
 
-	private static int heuristic(int i1, int j1, int i2, int j2) {
+	/**
+	 * A simple manhattan distance heuristic for A* pathfinding
+	 * 
+	 * @param i1
+	 *            - starting i position
+	 * @param j1
+	 *            - starting j position
+	 * @param i2
+	 *            - ending i position
+	 * @param j2
+	 *            - ending j position
+	 * @return the manhattan distance between two points
+	 */
+	private int heuristic(int i1, int j1, int i2, int j2) {
 		return Math.abs(i1 - i2) + Math.abs(j1 - j2);
 	}
 }

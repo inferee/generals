@@ -1,11 +1,9 @@
 package system;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import graphics.PlayerGraphics;
+import graphics.SpectatorGraphics;
 
 /**
  * The game board for generals.io.
@@ -17,6 +15,7 @@ public class GameBoard {
 	private final int iSize;
 	private final int jSize;
 	private GameGenerator g;
+	private Spectator[] spectators;
 	private Player[] players;
 	private ArrayDeque<Move>[] moves;
 	private Space[][] board;
@@ -31,10 +30,10 @@ public class GameBoard {
 	 *            - the i size of the board
 	 * @param j
 	 *            - the j size of the board
-	 * @param mountains
-	 *            - the number of mountains
-	 * @param cities
-	 *            - the number of cities
+	 * @param proportionMountains
+	 *            - the proportion of mountains
+	 * @param proportionCities
+	 *            - the proportion of cities
 	 * @param kingdoms
 	 *            - the number of kingdoms
 	 * @param minMaze
@@ -60,9 +59,11 @@ public class GameBoard {
 	 *            -the custom board
 	 * @param players
 	 *            - the custom players
-	 * @param mountains
+	 * @param moves
+	 *            - the custom array of queues for moves
+	 * @param propotionMountains
 	 *            - number of mountains (for the game board generator)
-	 * @param cities
+	 * @param proportionCities
 	 *            - number of cities (for the game board generator)
 	 * @param kingdoms
 	 *            - number of kingdoms (for the game board generator)
@@ -73,12 +74,14 @@ public class GameBoard {
 	 *            - minimum manhattan distance between kings (for the game board
 	 *            generator)
 	 */
-	public GameBoard(Space[][] board, Player[] players, double proportionMountains, double proportionCities,
-			int kingdoms, int minMaze, int minMan) {
+	public GameBoard(Space[][] board, Player[] players, ArrayDeque<Move>[] moves, Spectator[] spectators,
+			double proportionMountains, double proportionCities, int kingdoms, int minMaze, int minMan) {
 		this.kingdoms = players.length;
 		this.iSize = board.length;
 		this.jSize = board[0].length;
 		this.players = players;
+		this.moves = moves;
+		this.spectators = spectators;
 		g = new GameGenerator(iSize, jSize, proportionMountains, proportionCities, kingdoms, minMaze, minMan);
 		reset(board);
 	}
@@ -146,14 +149,14 @@ public class GameBoard {
 			successful = g.create(100, false);
 		}
 		int[][] grid = g.getGrid();
-		for (int i = 0; i < grid.length; i++) {
-			for (int j = 0; j < grid[i].length; j++) {
+		for (int i = 0; i < iSize; i++) {
+			for (int j = 0; j < jSize; j++) {
 				if (grid[i][j] == 0) {
 					board[i][j] = new Territory(0, 0);
 				} else if (grid[i][j] == -1) {
 					board[i][j] = new Space(true);
 				} else if (grid[i][j] == -2) {
-					board[i][j] = new City(0, 40 + (int) Math.random() * 6, false);
+					board[i][j] = new City(0, g.getRandomCity(), false);
 				} else {
 					board[i][j] = new City(grid[i][j], 1, true);
 				}
@@ -167,10 +170,11 @@ public class GameBoard {
 	private void initializePlayers() {
 		moves = new ArrayDeque[kingdoms];
 		players = new Player[kingdoms];
-		for (int i = 0; i < moves.length; i++) {
+		for (int i = 0; i < kingdoms; i++) {
 			moves[i] = new ArrayDeque<>();
 			players[i] = new PlayerGraphics(iSize, jSize, kingdoms, i + 1, moves[i]);
 		}
+		spectators = new Spectator[] { new SpectatorGraphics(iSize, jSize, kingdoms) };
 	}
 
 	/**
@@ -258,12 +262,16 @@ public class GameBoard {
 	 * Updates each of the players with their own view of the board.
 	 */
 	private void updatePlayers() {
-		for (int i = 0; i < players.length; i++) {
+		Viewed[][] everything = playerView(0);
+		for (int i = 0; i < kingdoms; i++) {
 			if (!dead[i]) {
 				players[i].update(playerView(i + 1), armyState);
 			} else {
-				players[i].update(playerView(0), armyState);
+				players[i].update(everything, armyState);
 			}
+		}
+		for (Spectator s : spectators) {
+			s.update(everything, armyState);
 		}
 	}
 
@@ -321,7 +329,8 @@ public class GameBoard {
 				for (int j = 0; j < jSize; j++) {
 					if (board[i][j] instanceof Occupiable) {
 						result[i][j] = new Viewed(true, false, ((Occupiable) board[i][j]).getType(),
-								((Occupiable) board[i][j]).getTroops(), board[i][j] instanceof City,
+								((Occupiable) board[i][j]).getTroops(),
+								(board[i][j] instanceof City && !((City) board[i][j]).isKing()),
 								(board[i][j] instanceof City && ((City) board[i][j]).isKing()));
 					} else {
 						result[i][j] = new Viewed(true, true, 0, 0, false, false);

@@ -5,17 +5,7 @@ package system;
  * 
  * @author Axel Li
  */
-public interface Player {
-	/**
-	 * Updates the player about the game state.
-	 * 
-	 * @param board
-	 *            - the current board
-	 * @param armyState
-	 *            - the state of each player's army and land
-	 */
-	public void update(Viewed[][] board, int[][] armyState);
-
+public interface Player extends Spectator {
 	/**
 	 * Notifies the player that a move has failed
 	 * 

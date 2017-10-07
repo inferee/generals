@@ -8,6 +8,7 @@ import javax.swing.JToggleButton;
  * @author Axel Li
  */
 public class ToggleButton extends JToggleButton {
+	private static final long serialVersionUID = 1L;
 	public final int i;
 	public final int j;
 
