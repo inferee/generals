@@ -9,7 +9,7 @@ import graphics.SpectatorGraphics;
 /**
  * A game starter class for generals.
  * 
- * @author s-liax
+ * @author Axel Li
  */
 public class GameStart {
 	private static final int minI = 15;
@@ -46,7 +46,7 @@ public class GameStart {
 	/**
 	 * Starts the game and returns true when done.
 	 * 
-	 * @return true
+	 * @return <code>true</code>
 	 * @throws InterruptedException
 	 */
 	public boolean startGame() throws InterruptedException {
@@ -72,7 +72,7 @@ public class GameStart {
 	 *            - the i size
 	 * @param j
 	 *            - the j size
-	 * @return true if successful
+	 * @return <code>true</code> if successful
 	 */
 	public boolean setSize(int i, int j) {
 		if (i >= minI && i <= maxI && j >= minJ && j <= maxJ) {
@@ -101,7 +101,7 @@ public class GameStart {
 	 *            - the proportion of mountains
 	 * @param city
 	 *            - the proportion of cities
-	 * @return true if successful
+	 * @return <code>true</code> if successful
 	 */
 	public boolean setProportion(double mountain, double city) {
 		if (mountain >= minMountain && mountain <= maxMountain && city >= minCity && city <= maxCity) {
@@ -138,7 +138,7 @@ public class GameStart {
 	 *            - the minimum maze distance
 	 * @param manhattan
 	 *            - the minimum manhattan distance
-	 * @return true if successful
+	 * @return <code>true</code> if successful
 	 */
 	public boolean setMinDistance(int maze, int manhattan) {
 		int val = (int) Math.sqrt(8.0 / 5 * iSize * jSize / players.size());
@@ -165,7 +165,7 @@ public class GameStart {
 	 * 
 	 * @param tick
 	 *            - the tick speed
-	 * @return true if successful
+	 * @return <code>true</code> if successful
 	 */
 	public boolean setTick(int tick) {
 		if (tick >= minTick && tick <= maxTick) {
@@ -186,12 +186,21 @@ public class GameStart {
 	}
 
 	/**
+	 * Gets the number of players.
+	 * 
+	 * @return the number of players currently in the list
+	 */
+	public int numPlayers() {
+		return players.size();
+	}
+
+	/**
 	 * Adds a player to the game.
 	 * 
 	 * @param p
 	 *            - the new player
-	 * @return the player number of the player or 0 if the player limit had been
-	 *         reached or if the player has already been added
+	 * @return the player number of the player or 0 if either the player limit had
+	 *         been reached or if the player has already been added
 	 */
 	public int addPlayer(Player p) {
 		if (!players.contains(p) && players.size() < maxPlayers) {
@@ -229,12 +238,22 @@ public class GameStart {
 	}
 
 	/**
+	 * Gets the number of spectators.
+	 * 
+	 * @return the number of spectators currently in the list
+	 */
+	public int numSpectators() {
+		return spectators.size();
+	}
+
+	/**
 	 * Adds a spectator to the game.
 	 * 
 	 * @param s
 	 *            - the new spectator
-	 * @return the number of spectators watching the game or 0 if the spectator
-	 *         limit had been reached or if the spectator was already added
+	 * @return the number of spectators watching the game or 0 if either the
+	 *         spectator limit had been reached or if the spectator was already
+	 *         added
 	 */
 	public int addSpectator(Spectator s) {
 		if (!spectators.contains(s) && spectators.size() < maxSpectators) {
@@ -373,6 +392,8 @@ public class GameStart {
 	 * 
 	 * The minimum maze and manhattan distance being swapped. DONE (Order in
 	 * constructor inputs, reordering of said inputs)
+	 * 
+	 * More/better code documentation. IN_PROGRESS
 	 * 
 	 * Creating custom game boards in the GameStart class or elsewhere. IN_PROGRESS
 	 */

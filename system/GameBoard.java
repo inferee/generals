@@ -153,7 +153,7 @@ public class GameBoard {
 	/**
 	 * Returns the number of cycles.
 	 * 
-	 * @return the number of cycles that have occurred.
+	 * @return the number of cycles that have occurred
 	 */
 	public int getCount() {
 		return count;
@@ -162,7 +162,7 @@ public class GameBoard {
 	/**
 	 * Returns the status of the players.
 	 * 
-	 * @return the status of each player
+	 * @return <code>false</code> if the player is alive, <code>true</code> if dead
 	 */
 	public boolean[] getStatus() {
 		return dead;
@@ -298,7 +298,7 @@ public class GameBoard {
 	 * 
 	 * @param m
 	 *            - the move to be checked
-	 * @return <code> true </code> if the move is valid based on above parameters
+	 * @return <code> true </code> if the move is valid based on the parameters
 	 */
 	private boolean isValid(Move m) {
 		return m.startI >= 0 && m.startI < iSize && m.startJ >= 0 && m.startJ < jSize && m.endI >= 0 && m.endI < iSize
@@ -341,11 +341,11 @@ public class GameBoard {
 	}
 
 	/**
-	 * Generates the viewed grid for a player.
+	 * Generates the view for a player.
 	 * 
 	 * @param p
 	 *            - the player number
-	 * @return the view for the player
+	 * @return a matrix of <code>Viewed</code> objects
 	 */
 	private Viewed[][] playerView(int p) {
 		Viewed[][] result = new Viewed[iSize][jSize];

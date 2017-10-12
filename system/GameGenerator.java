@@ -59,18 +59,18 @@ public class GameGenerator {
 	}
 
 	/**
-	 * Returns the grid.
+	 * Returns the currently generated grid.
 	 * 
-	 * @return the currently generated grid
+	 * @return a matrix of <code>int</code> values
 	 */
 	public int[][] getGrid() {
 		return grid;
 	}
 
 	/**
-	 * Randomly generates a player sequence and returns it.
+	 * Returns a randomly generated a player sequence.
 	 * 
-	 * @return the randomly generated sequence
+	 * @return an array of <code>int</code> with numbers from
 	 */
 	public int[] getSequence() {
 		for (int i = 0; i < playerSequence.length; i++) {
@@ -193,9 +193,9 @@ public class GameGenerator {
 	}
 
 	/**
-	 * Generates a grid randomly.
+	 * Generates a grid with mountains and cities randomly.
 	 * 
-	 * @return the generated grid
+	 * @return a matrix of <int> values with mountains as -1 and cities as -2
 	 */
 	private int[][] generate(int mountains, int cities) {
 		int[][] newGrid = new int[i][j];
