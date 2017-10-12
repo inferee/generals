@@ -60,11 +60,12 @@ public class SpectatorGraphics implements Spectator {
 	 * @param playerNumber
 	 *            - the player number
 	 */
-	protected SpectatorGraphics(int i, int j, int kingdoms, ArrayDeque<Move> queue, int playerNumber) {
+	protected SpectatorGraphics(int i, int j, int kingdoms, int playerNumber) {
 		this.iSize = i;
 		this.jSize = j;
 		this.kingdoms = kingdoms;
-		this.board = new BoardGraphics(iSize, jSize, (int) (992.0 / iSize), playerNumber, colors, queue, false);
+		this.board = new BoardGraphics(iSize, jSize, (int) (992.0 / iSize), playerNumber, colors,
+				new ArrayDeque<Move>(), false);
 		initializeGraphics();
 	}
 

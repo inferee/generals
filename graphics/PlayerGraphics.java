@@ -34,10 +34,14 @@ public class PlayerGraphics extends SpectatorGraphics implements Player {
 	 * @param queue
 	 *            - the queue for Move objects
 	 */
-	public PlayerGraphics(int i, int j, int kingdoms, int playerNumber, ArrayDeque<Move> queue) {
-		super(i, j, kingdoms, queue, playerNumber);
+	public PlayerGraphics(int i, int j, int kingdoms, int playerNumber) {
+		super(i, j, kingdoms, playerNumber);
 		this.playerNumber = playerNumber;
-		this.queue = queue;
+		queue = super.board.getQueue();
+	}
+
+	public ArrayDeque<Move> getQueue() {
+		return queue;
 	}
 
 	public void failedMove(Move failing) {

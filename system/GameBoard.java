@@ -49,6 +49,36 @@ public class GameBoard {
 		board = new Space[i][j];
 		g = new GameGenerator(i, j, proportionMountains, proportionCities, kingdoms, minMaze, minMan);
 		initializePlayers();
+		setQueues();
+		reset();
+	}
+
+	/**
+	 * Creates a new game board with custom players.
+	 * 
+	 * @param players
+	 *            - the custom players
+	 * @param moves
+	 *            - the custom array of queues for moves
+	 * @param proportionMountains
+	 *            - the proportion of mountains
+	 * @param proportionCities
+	 *            - the proportion of cities
+	 * @param minMaze
+	 *            - minimum maze distance between kingdoms
+	 * @param minMan
+	 *            - minimum manhattan distance between kingdoms
+	 */
+	public GameBoard(Player[] players, Spectator[] spectators, int i, int j, double proportionMountains,
+			double proportionCities, int minMan, int minMaze) {
+		this.kingdoms = players.length;
+		this.iSize = i;
+		this.jSize = j;
+		board = new Space[i][j];
+		this.players = players;
+		this.spectators = spectators;
+		g = new GameGenerator(iSize, jSize, proportionMountains, proportionCities, kingdoms, minMaze, minMan);
+		setQueues();
 		reset();
 	}
 
@@ -65,8 +95,6 @@ public class GameBoard {
 	 *            - number of mountains (for the game board generator)
 	 * @param proportionCities
 	 *            - number of cities (for the game board generator)
-	 * @param kingdoms
-	 *            - number of kingdoms (for the game board generator)
 	 * @param minMaze
 	 *            - minimum maze distance between kings (for the game board
 	 *            generator)
@@ -74,15 +102,15 @@ public class GameBoard {
 	 *            - minimum manhattan distance between kings (for the game board
 	 *            generator)
 	 */
-	public GameBoard(Space[][] board, Player[] players, ArrayDeque<Move>[] moves, Spectator[] spectators,
-			double proportionMountains, double proportionCities, int kingdoms, int minMaze, int minMan) {
+	public GameBoard(Space[][] board, Player[] players, Spectator[] spectators, double proportionMountains,
+			double proportionCities, int minMan, int minMaze) {
 		this.kingdoms = players.length;
 		this.iSize = board.length;
 		this.jSize = board[0].length;
 		this.players = players;
-		this.moves = moves;
 		this.spectators = spectators;
 		g = new GameGenerator(iSize, jSize, proportionMountains, proportionCities, kingdoms, minMaze, minMan);
+		setQueues();
 		reset(board);
 	}
 
@@ -141,6 +169,35 @@ public class GameBoard {
 	}
 
 	/**
+	 * Checks if the game has ended.
+	 * 
+	 * @return the player number of the winner if the game has ended, 0 if otherwise
+	 */
+	public int gameEnd() {
+		int alive = 0;
+		int number = 0;
+		for (int i = 0; i < kingdoms; i++) {
+			if (!dead[i]) {
+				alive++;
+				number = i;
+			}
+		}
+		return alive <= 1 ? number + 1 : 0;
+	}
+
+	/**
+	 * Checks if the game has ended and resets all the players if so.
+	 */
+	public void resetPlayers() {
+		int x = gameEnd();
+		if (x > 0) {
+			for (Player p : players) {
+				p.reset(x);
+			}
+		}
+	}
+
+	/**
 	 * Randomly generates the game board.
 	 */
 	private void randomize() {
@@ -165,14 +222,22 @@ public class GameBoard {
 	}
 
 	/**
+	 * Gets the queues for moves from each player.
+	 */
+	private void setQueues() {
+		moves = new ArrayDeque[kingdoms];
+		for (int i = 0; i < kingdoms; i++) {
+			moves[i] = players[i].getQueue();
+		}
+	}
+
+	/**
 	 * Initializes all players.
 	 */
 	private void initializePlayers() {
-		moves = new ArrayDeque[kingdoms];
 		players = new Player[kingdoms];
 		for (int i = 0; i < kingdoms; i++) {
-			moves[i] = new ArrayDeque<>();
-			players[i] = new PlayerGraphics(iSize, jSize, kingdoms, i + 1, moves[i]);
+			players[i] = new PlayerGraphics(iSize, jSize, kingdoms, i + 1);
 		}
 		spectators = new Spectator[] { new SpectatorGraphics(iSize, jSize, kingdoms) };
 	}

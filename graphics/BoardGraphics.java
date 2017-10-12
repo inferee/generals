@@ -101,6 +101,10 @@ public class BoardGraphics extends JPanel {
 		}
 	}
 
+	public ArrayDeque<Move> getQueue() {
+		return queue;
+	}
+
 	/**
 	 * Resets the selected button.
 	 * 
