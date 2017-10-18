@@ -409,5 +409,7 @@ public class GameStart {
 	 * More/better/updated code documentation. IN_PROGRESS
 	 * 
 	 * Creating custom game boards in the GameStart class or elsewhere. IN_PROGRESS
+	 * 
+	 * Hard coded AI to play generals. IN_PROGRESS
 	 */
 }
