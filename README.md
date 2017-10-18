@@ -1,4 +1,4 @@
 # generals
-generals.io clone 
+generals.io clone (currently a work in progress)
 
-(currently a work in progress)
+main method in GameStart class
