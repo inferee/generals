@@ -2,8 +2,8 @@ package system;
 
 import java.util.ArrayDeque;
 
-import graphics.PlayerGraphics;
-import graphics.SpectatorGraphics;
+import players.PlayerGraphics;
+import players.SpectatorGraphics;
 
 /**
  * The game board for generals.io.
@@ -22,6 +22,7 @@ public class GameBoard {
 	private boolean[] dead;
 	private int[][] armyState;
 	private int count;
+	private boolean inGame;
 
 	/**
 	 * Creates a new game board.
@@ -251,7 +252,7 @@ public class GameBoard {
 			int i = sequence[x];
 			if (!moves[i].isEmpty()) {
 				Move m = moves[i].poll();
-				System.out.println("(" + m.startI + "," + m.startJ + ") to (" + m.endI + "," + m.endJ + ")");
+//				System.out.println("(" + m.startI + "," + m.startJ + ") to (" + m.endI + "," + m.endJ + ")");
 				if (!makeMove(m, i) || board[m.endI][m.endJ] instanceof Occupiable
 						&& ((Occupiable) board[m.endI][m.endJ]).getType() != i + 1) {
 					players[i].failedMove(m);

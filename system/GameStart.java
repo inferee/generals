@@ -3,8 +3,9 @@ package system;
 import java.util.ArrayList;
 import java.util.List;
 
-import graphics.PlayerGraphics;
-import graphics.SpectatorGraphics;
+import players.AI;
+import players.PlayerGraphics;
+import players.SpectatorGraphics;
 
 /**
  * A game starter class for generals.
@@ -34,6 +35,8 @@ public class GameStart {
 	private int tick = 500;
 	private List<Player> players;
 	private List<Spectator> spectators;
+	private Space[][] board;
+	private GameBoard g;
 
 	/**
 	 * Creates a new game starter.
@@ -50,12 +53,18 @@ public class GameStart {
 	 * @throws InterruptedException
 	 */
 	public boolean startGame() throws InterruptedException {
-		GameBoard g = new GameBoard(players.toArray(new Player[players.size()]),
-				spectators.toArray(new Spectator[spectators.size()]), iSize, jSize, mountain, city, manhattan, maze);
-		int x = 200;
-		while (x-- > 0) {// TODO: for debugging purposes only, remove when finished
-			g.cycle();
+		if (board == null) {
+			g = new GameBoard(players.toArray(new Player[players.size()]),
+					spectators.toArray(new Spectator[spectators.size()]), iSize, jSize, mountain, city, manhattan,
+					maze);
+		} else {
+			g = new GameBoard(board, players.toArray(new Player[players.size()]),
+					spectators.toArray(new Spectator[spectators.size()]), mountain, city, manhattan, maze);
 		}
+//		int x = 200;
+//		while (x-- > 0) {// TODO: for debugging purposes only, remove when finished
+//			g.cycle();
+//		}
 		while (g.gameEnd() == 0) {
 			long before = System.nanoTime();
 			g.cycle();
@@ -305,17 +314,21 @@ public class GameStart {
 		 * Thread.sleep(Math.max(time, minWaitTime)); }
 		 */
 
-		int i = 15;
-		int j = 15;
-		int kingdoms = 8;
+		int i = 18;
+		int j = 18;
+		int kingdoms = 7;
 		GameStart start = new GameStart();
-		System.out.println(start.setSize(i, j));
+		start.setSize(i, j);
+		start.setTick(400);
 		for (int x = 1; x <= kingdoms; x++) {
-			start.addPlayer(new PlayerGraphics(i, j, kingdoms, x));
-			System.out.println(start.getSize()[0] + " " + start.getSize()[1] + " " + start.getProportion()[0] + " "
-					+ start.getProportion()[1] + " " + start.getMinDistance()[0] + " " + start.getMinDistance()[1]);
+			start.addPlayer(new AI(i, j, kingdoms+1, x));
+			// System.out.println(start.getSize()[0] + " " + start.getSize()[1] + " " +
+			// start.getProportion()[0] + " "
+			// + start.getProportion()[1] + " " + start.getMinDistance()[0] + " " +
+			// start.getMinDistance()[1]);
 		}
-		start.addSpectator(new SpectatorGraphics(i, j, kingdoms));
+		start.addPlayer(new PlayerGraphics(i,j,kingdoms+1,kingdoms+1));
+//		start.addSpectator(new SpectatorGraphics(i, j, kingdoms));
 		start.startGame();
 	}
 
@@ -393,7 +406,7 @@ public class GameStart {
 	 * The minimum maze and manhattan distance being swapped. DONE (Order in
 	 * constructor inputs, reordering of said inputs)
 	 * 
-	 * More/better code documentation. IN_PROGRESS
+	 * More/better/updated code documentation. IN_PROGRESS
 	 * 
 	 * Creating custom game boards in the GameStart class or elsewhere. IN_PROGRESS
 	 */
